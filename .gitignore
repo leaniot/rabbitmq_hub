@@ -1,0 +1,9 @@
+db.sqlite3
+*.pyc
+*.log
+*.un~
+.idea
+.git
+dist
+build
+*.egg-info
