@@ -21,7 +21,7 @@ setup(
     zip_safe=False,
     license="Proprietary",
     platforms="any",
-    install_requires=[],
+    install_requires=['amqp'],
     entry_points={},
 )
 

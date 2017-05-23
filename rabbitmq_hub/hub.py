@@ -2,6 +2,8 @@ import json
 import socket
 import logging
 import amqp
+import string
+import random
 from .connection import ConnectionCluster, wait_func
 from .rabbit import RabbitConnection
 try:
@@ -12,11 +14,15 @@ except ImportError:
 logger = logging.getLogger(__file__)
 
 
+def random_string(length):
+    return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(length))
+
+
 class PubSubHub(object):
     def __init__(self, connection_class=RabbitConnection, queue_group=None, **kwargs):
         self.pub_conncluster = ConnectionCluster(connection_class=connection_class, max_connections=100, **kwargs)
         self.sub_conncluster = ConnectionCluster(connection_class=connection_class, max_connections=1, **kwargs)
-        self.queue_group = queue_group or 'none'
+        self.queue_group = queue_group or random_string(8)
 
     def __del__(self):
         self.pub_conncluster.disconnect()
