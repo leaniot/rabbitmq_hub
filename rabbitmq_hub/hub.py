@@ -88,7 +88,6 @@ class PubSubHub(object):
     def subscribe(self, topic, callback=None):
         def decorator(callback_fn):
             for pool in self.sub_conncluster.all_connection_pools():
-                print(pool)
                 connection = pool.get_connection()
                 try:
                     connection.subscribe(topic, self.queue_group, callback=callback_fn)
