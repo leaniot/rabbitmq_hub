@@ -19,17 +19,17 @@ def random_string(length):
 
 
 class PubSubHub(object):
-    def __init__(self, connection_class=RabbitConnection, queue_group=None, **kwargs):
-        self.pub_conncluster = ConnectionCluster(connection_class=connection_class, max_connections=100, **kwargs)
-        self.sub_conncluster = ConnectionCluster(connection_class=connection_class, max_connections=1, **kwargs)
+    def __init__(self, connection_class=RabbitConnection, queue_group=None, url=None, **kwargs):
         self.queue_group = queue_group or random_string(8)
+        params = self.parse_url(url, **kwargs)
+        self.pub_conncluster = ConnectionCluster(connection_class=connection_class, max_connections=100, **params)
+        self.sub_conncluster = ConnectionCluster(connection_class=connection_class, max_connections=1, **params)
 
     def __del__(self):
         self.pub_conncluster.disconnect()
         self.sub_conncluster.disconnect()
 
-    @classmethod
-    def create(cls, server_urls, **kwargs):
+    def parse_url(self, server_urls, **kwargs):
         if not isinstance(server_urls, (list, tuple)):
             server_urls = [server_urls]
 
@@ -51,7 +51,7 @@ class PubSubHub(object):
                 args.update(socket_connect_timeout=3)
             endpoints.append(args)
         kwargs.update(endpoints=endpoints)
-        return cls(**kwargs)
+        return kwargs
 
     def publish(self, msg, topic, **kwargs):
         exchange_name = topic.split('.')[0]
@@ -88,6 +88,7 @@ class PubSubHub(object):
     def subscribe(self, topic, callback=None):
         def decorator(callback_fn):
             for pool in self.sub_conncluster.all_connection_pools():
+                print(pool)
                 connection = pool.get_connection()
                 try:
                     connection.subscribe(topic, self.queue_group, callback=callback_fn)

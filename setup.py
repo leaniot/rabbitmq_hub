@@ -2,7 +2,7 @@
 import os
 from setuptools import setup, find_packages
 
-__version__ = '1.0.1'
+__version__ = '1.2.0'
 with open(os.path.join(os.path.dirname(__file__), 'README.md')) as readme:
     README = readme.read()
 
