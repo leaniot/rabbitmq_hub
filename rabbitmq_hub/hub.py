@@ -19,7 +19,7 @@ def random_string(length):
 
 
 class PubSubHub(object):
-    def __init__(self, connection_class=RabbitConnection, queue_group=None, url=None, **kwargs):
+    def __init__(self, url=None, queue_group=None, connection_class=RabbitConnection, **kwargs):
         self.queue_group = queue_group or random_string(8)
         params = self.parse_url(url, **kwargs)
         self.pub_conncluster = ConnectionCluster(connection_class=connection_class, max_connections=100, **params)
@@ -29,7 +29,8 @@ class PubSubHub(object):
         self.pub_conncluster.disconnect()
         self.sub_conncluster.disconnect()
 
-    def parse_url(self, server_urls, **kwargs):
+    @staticmethod
+    def parse_url(server_urls, **kwargs):
         if not isinstance(server_urls, (list, tuple)):
             server_urls = [server_urls]
 
@@ -38,19 +39,20 @@ class PubSubHub(object):
             args = {}
             parsed = urlparse.urlparse(url)
             virtual_host = parsed.path.strip('/') or '/'
-            args.update(host=parsed.hostname, port=parsed.port, virtual_host=virtual_host)
+            args.update({"host": parsed.hostname, "port": parsed.port,
+                         "virtual_host": virtual_host})
             if parsed.username:
-                args.update(user=parsed.username)
+                args.update({"user": parsed.username})
             if parsed.password:
-                args.update(password=parsed.password)
+                args.update({"password": parsed.password})
             if parsed.query:
                 query_args = urlparse.parse_qs(parsed.query)
                 query_args = dict(map(lambda x: (x[0], x[1][0]), query_args.items()))
                 args.update(query_args)
             if 'socket_connect_timeout' not in args:
-                args.update(socket_connect_timeout=3)
+                args.update({"socket_connect_timeout": 3})
             endpoints.append(args)
-        kwargs.update(endpoints=endpoints)
+        kwargs.update({"endpoints": endpoints})
         return kwargs
 
     def publish(self, msg, topic, **kwargs):

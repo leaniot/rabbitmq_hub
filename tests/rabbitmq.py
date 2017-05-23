@@ -16,7 +16,7 @@ class RabbitMQTestCase(TestCase):
         print('user_callback: topic: %s, msg: %s' % (topic, msg))
 
     def test_hub_publish(self):
-        p = PubSubHub(queue_group='test').create(['pubsub://127.0.0.1:5672/', 'pubsub://127.0.0.1:5672/'])
+        p = PubSubHub(url=['pubsub://127.0.0.1:5672/', 'pubsub://127.0.0.1:5672/'], queue_group='test')
         i = 1
         while True:
             msg = "message: %d" % i
@@ -27,7 +27,7 @@ class RabbitMQTestCase(TestCase):
             time.sleep(0.1)
 
     def test_hub_subscribe(self):
-        h = PubSubHub.create(['http://127.0.0.1:5672/leaniot', 'http://127.0.0.1:5672/leaniot'], queue_group='test')
+        h = PubSubHub(url=['http://127.0.0.1:5672/', 'http://127.0.0.1:5672/'], queue_group='test')
 
         h.subscribe('leaniot.user.login', self.user_callback)
         h.subscribe('leaniot.user.logout', self.user_callback)
