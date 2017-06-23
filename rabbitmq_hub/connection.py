@@ -7,10 +7,14 @@ import random
 import errno
 from six import string_types
 from itertools import chain
-from queue import LifoQueue, Empty, Full
+try:
+    from queue import LifoQueue, Empty, Full
+except ImportError:
+    from Queue import LifoQueue, Empty, Full
 
-# if socket.socket.__module__ == "gevent.socket":
-if socket.socket.__module__ == "gevent._socket3":
+
+if socket.socket.__module__ == "gevent.socket":
+# if socket.socket.__module__ == "gevent._socket3":
     import gevent
     import gevent.threading
     spawn_func = gevent.spawn
