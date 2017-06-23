@@ -3,6 +3,7 @@ import json
 import socket
 from functools import partial
 import time
+from exception import ConnectionError
 
 
 class Handler(object):

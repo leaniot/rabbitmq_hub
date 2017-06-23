@@ -1,8 +1,8 @@
-
 import amqp
 import json
 import socket
 from itertools import chain
+from exception import ConnectionError
 
 
 class Pub(object):
