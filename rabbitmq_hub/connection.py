@@ -14,8 +14,6 @@ except ImportError:
     from Queue import LifoQueue, Empty, Full
 
 
-
-
 if socket.socket.__module__ == "gevent.socket":
 # if socket.socket.__module__ == "gevent._socket3":
     import gevent
