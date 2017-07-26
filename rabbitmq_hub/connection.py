@@ -7,7 +7,7 @@ import random
 import errno
 from six import string_types
 from itertools import chain
-from exception import ConnectionError
+from .exception import ConnectionError
 try:
     from queue import LifoQueue, Empty, Full
 except ImportError:

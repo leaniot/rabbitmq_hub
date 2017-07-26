@@ -2,7 +2,7 @@ import amqp
 import json
 import socket
 import sys, os
-from exception import ConnectionError
+from .exception import ConnectionError
 
 
 class CallbackWrapper(object):
