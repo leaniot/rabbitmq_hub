@@ -4,7 +4,7 @@ import logging
 import amqp
 import string
 import random
-from exception import ConnectionError
+from .exception import ConnectionError
 from .connection import ConnectionCluster, wait_func
 from .rabbit import RabbitConnection
 try:
