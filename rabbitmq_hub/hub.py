@@ -86,7 +86,7 @@ class PubSubHub(object):
                 connection.disconnect()
             finally:
                 self.pub_conncluster.release(connection)
-        logger.error('PUB FAIL', {'topic': topic, 'msg': msg})
+        logger.error('PUB FAIL, topic: %s, msg: %s', topic, msg)
 
     def subscribe(self, topic, callback=None):
         def decorator(callback_fn):

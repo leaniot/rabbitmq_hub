@@ -8,6 +8,7 @@ import errno
 from six import string_types
 from itertools import chain
 from .exception import ConnectionError
+from .logger import logger
 try:
     from queue import LifoQueue, Empty, Full
 except ImportError:
@@ -412,7 +413,6 @@ class ConnectionCluster(object):
         self.connection_pool_class = connection_pool_class
 
         self.endpoints = dict(map(lambda x: ('%s:%s' % (x['host'], x['port']), x), endpoints))
-
         for k, v in self.endpoints.items():
             v['connection_class'] = self.connection_class
             v.update(kwargs)
@@ -463,7 +463,7 @@ class ConnectionCluster(object):
     def connection_error(self, connection):
         connection.disconnect()
         self.release(connection)
-        key = '%s:%s'%(connection.host, connection.port)
+        key = '%s:%s' % (connection.host, connection.port)
         if key not in self._checking_pools:
             pool = self._available_pools.pop(key)
             spawn_func(self.check_endpoint, key, pool)

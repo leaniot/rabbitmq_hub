@@ -2,7 +2,7 @@
 import os
 from setuptools import setup, find_packages
 
-__version__ = '1.2.0'
+__version__ = '1.2.1'
 with open(os.path.join(os.path.dirname(__file__), 'README.md')) as readme:
     README = readme.read()
 
@@ -21,7 +21,7 @@ setup(
     zip_safe=False,
     license="Proprietary",
     platforms="any",
-    install_requires=['amqp'],
+    install_requires=['amqp', 'six'],
     entry_points={},
 )
 

@@ -112,7 +112,7 @@ class RabbitConnection(object):
             return
         try:
             self._connection = amqp.Connection(**self.connkwargs)
-            self._connection.connect()
+            # self._connection.connect()
             self._channel = self._connection.channel()
             self._register_handlers()
         except Exception:
