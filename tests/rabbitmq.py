@@ -29,14 +29,14 @@ class RabbitMQTestCase(TestCase):
             p.publish(msg, 'test.test.4')
             i += 1
             print('published %s messages' % (i))
-            time.sleep(0.5)
+            time.sleep(0.1)
 
     def test_hub_subscribe(self):
         h = self.get_hub()
         h.subscribe('test.test.1', self.user_callback)
         h.subscribe('test.test.2', self.user_callback)
 
-        # @h.subscribe('leaniot.realtime.data')
+        @h.subscribe('leaniot.realtime.data')
         @h.subscribe('test.test.3')
         @h.subscribe('test.test.4')
         def media_callback(topic, msg):
